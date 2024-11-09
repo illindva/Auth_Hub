@@ -16,9 +16,62 @@ def init_db():
         created TEXT NOT NULL,
         encryption_flag TEXT NOT NULL
     )''')
+
+    # Initialize Users table
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        user_type TEXT NOT NULL,
+        user_role TEXT NOT NULL,
+        approval_status TEXT NOT NULL DEFAULT 'No'
+    )''')
+
     conn.commit()
     conn.close()
 
+def insert_user(username, password, email, user_type, user_role, approval_status='No'):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('''INSERT INTO Users (username, password, email, user_type, user_role, approval_status)
+                      VALUES (?, ?, ?, ?, ?, ?)''',
+                   (username, password, email, user_type, user_role, approval_status))
+    conn.commit()
+    conn.close()
+
+def get_user_by_username(username):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM Users WHERE username = ?', (username,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
+
+def get_users_by_role(role):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM Users WHERE user_role = ?', (role,))
+    users = cursor.fetchall()
+    conn.close()
+    return users
+
+
+def get_user_by_id(user_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM Users WHERE id = ?', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
+
+
+def update_approval_status(user_id, status):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('UPDATE Users SET approval_status = ? WHERE id = ?', (status, user_id))
+    conn.commit()
+    conn.close()
 
 def insert_record(record):
     conn = sqlite3.connect('database.db')

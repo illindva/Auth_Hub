@@ -1,4 +1,12 @@
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+from encryption_util import encrypt_password, decrypt_password
 
-fernet_key = Fernet.generate_key().decode()  # Generate a key and decode it to string
-print(f"Insert this key in your .env file as FERNET_KEY={fernet_key}")
+# Load environment variables from .env file
+load_dotenv()
+
+password = input("Enter password to Encrypt : ")
+
+encrypted_password = encrypt_password(password)
+
+print(f"Encrypted Password: {encrypted_password}")

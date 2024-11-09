@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Approve User{% endblock %}
+
+{% block content %}
+<h1>Approve or Deny User</h1>
+<form action="{{ url_for('approve_user', id=user[0]) }}" method="post">
+    <div class="form-group">
+        <label for="username">Username: </label>
+        <input type="text" class="form-control" id="username" value="{{ user[1] }}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="email">Email: </label>
+        <input type="email" class="form-control" id="email" value="{{ user[3] }}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="user_type">User Type: </label>
+        <input type="text" class="form-control" id="user_type" value="{{ user[4] }}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="user_role">User Role: </label>
+        <input type="text" class="form-control" id="user_role" value="{{ user[5] }}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="approval_status">Approval Status: </label>
+        <select class="form-control" id="approval_status" name="approval_status">
+            <option value="Yes">Approve</option>
+            <option value="No">Deny</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

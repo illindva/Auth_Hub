@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Authorization Hub!</h1>
+    <p class="lead">
+        This application allows you to manage application credentials securely.<br>
+        It requires a valid user account to view and add credentials in this application.
+        All credentials are stored in a database and are encrypted using AES-256.<br>
+        Passwords are hashed using pbkdf2 and not visible to anyone unless the respective logged-in user has access to the credentials via Decrypt option.<br>
+        The application is built using Python Flask and SQLAlchemy. AskiTech Inc has implemented this application for its own use.
+    </p>
+</div>
+
+<h2>Browse Pages</h2>
+<ul class="list-group">
+    <li class="list-group-item">
+        <a href="{{ url_for('form') }}">Add Application Credentials</a>
+    </li>
+    <li class="list-group-item">
+        <a href="{{ url_for('show_records') }}">Credential Records</a>
+    </li>
+</ul>
+{% endblock %}

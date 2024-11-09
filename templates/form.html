@@ -3,8 +3,8 @@
 {% block title %}Add New Record{% endblock %}
 
 {% block content %}
-<h1>Authorization Form</h1>
-    <form method="POST">
+<h1>Add Application Credentials</h1>
+    <form action="{{ url_for('form') }}" method="POST">
         <label for="application">Application:</label><br>
         <select id="application" name="application" required>
             <option value="EmailSummarizer">EmailSummarizer</option>
