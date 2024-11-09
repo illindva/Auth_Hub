@@ -1,0 +1,4 @@
+flask
+pytz
+cryptography
+python-dotenv

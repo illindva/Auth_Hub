@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}View Records{% endblock %}
+
+{% block content %}
+<h1>Records</h1>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Application</th>
+            <th>Login Type</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>DB Host</th>
+            <th>DB Service Name</th>
+            <th>DB Port</th>
+            <th>Created (UTC)</th>
+            <th>Encryption Flag</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.id }}</td>
+            <td>{{ record.application }}</td>
+            <td>{{ record.login_type }}</td>
+            <td>{{ record.username }}</td>
+            <td>{{ record.password }}</td>
+            <td>{{ record.db_host }}</td>
+            <td>{{ record.db_service_name }}</td>
+            <td>{{ record.db_port }}</td>
+            <td>{{ record.created }}</td>
+            <td>{{ record.encryption_flag }}</td>
+            <td>
+                <a href="{{ url_for('decrypt', id=record.id) }}" class="btn btn-secondary btn-sm">Decrypt</a>
+                <form action="{{ url_for('delete', id=record.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('form') }}" class="btn btn-primary">Add New Record</a>
+{% endblock %}

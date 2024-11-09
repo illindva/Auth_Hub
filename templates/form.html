@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Record{% endblock %}
+
+{% block content %}
+<h1>Authorization Form</h1>
+    <form method="POST">
+        <label for="application">Application:</label><br>
+        <select id="application" name="application" required>
+            <option value="EmailSummarizer">EmailSummarizer</option>
+            <option value="Credentials">Credentials</option>
+            <!-- Add more options here -->
+        </select><br><br>
+
+        <label for="login_type">Login Type:</label><br>
+        <input type="radio" id="oracle" name="login_type" value="Oracle" required>Oracle<br>
+        <input type="radio" id="sybase" name="login_type" value="Sybase" required>Sybase<br>
+        <input type="radio" id="mssql" name="login_type" value="MSSQL" required>MSSQL<br>
+        <!-- Add more radio buttons here -->
+        <br><br>
+
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="db_host">DB Host:</label><br>
+        <input type="text" id="db_host" name="db_host"><br><br>
+
+        <label for="db_service_name">DB Service Name:</label><br>
+        <input type="text" id="db_service_name" name="db_service_name"><br><br>
+
+        <label for="db_port">DB Port:</label><br>
+        <input type="text" id="db_port" name="db_port"><br><br>
+
+        <label for="created">Created:</label><br>
+        <input type="datetime-local" id="created" name="created" required><br><br>
+
+        <label for="encryption_flag">Encryption Flag:</label><br>
+        <input type="radio" id="yes" name="encryption_flag" value="Yes" required>Yes<br>
+        <input type="radio" id="no" name="encryption_flag" value="No" required>No<br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
