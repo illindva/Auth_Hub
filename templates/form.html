@@ -3,44 +3,76 @@
 {% block title %}Add New Record{% endblock %}
 
 {% block content %}
-<h1>Authorization Form</h1>
-    <form method="POST">
-        <label for="application">Application:</label><br>
-        <select id="application" name="application" required>
+<h4>Add Application Credentials</h4>
+<form action="{{ url_for('add_application_credentials') }}" method="post">
+    <div class="form-group">
+        <label for="application" class="required-field">Application:</label>
+        <select id="application" name="application" class="form-control" required>
             <option value="EmailSummarizer">EmailSummarizer</option>
-            <option value="Credentials">Credentials</option>
-            <!-- Add more options here -->
-        </select><br><br>
+            <option value="AuthHub">Credentials</option>
+            <option value="AskiBot">EmailSummarizer</option>
+            <option value="dbExtracts">Credentials</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="login_type" class="required-field">Login Type:</label><br>
+        <div class="radio-group">
+            <label for="oracle">
+                <input type="radio" id="oracle" name="login_type" value="Oracle" required> Oracle
+            </label>
+            <label for="sybase">
+                <input type="radio" id="sybase" name="login_type" value="Sybase" required> Sybase
+            </label>
+            <label for="mssql">
+                <input type="radio" id="mssql" name="login_type" value="MSSQL" required> MSSQL
+            </label>
+            <label for="UserAccount">
+                <input type="radio" id="UserAccount" name="login_type" value="UserAccount" required> User Account
+            </label>
+            <label for="EmailAccount">
+                <input type="radio" id="EmailAccount" name="login_type" value="EmailAccount" required> Email Account
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="username" class="required-field">Username/Email/AccountID:</label>
+        <input type="text" id="username" name="username" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="password" class="required-field">Password:</label>
+        <input type="password" id="password" name="password" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="db_host">Database Host:</label>
+        <input type="text" id="db_host" name="db_host" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="db_service_name">Database Service Name Or Schema:</label>
+        <input type="text" id="db_service_name" name="db_service_name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="db_port">Database Port:</label>
+        <input type="number" id="db_port" name="db_port" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="created" class="required-field">Created On:</label>
+        <input type="datetime-local" id="created" name="created" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="encryption_flag" class="required-field">Encrypt Password:</label>
+        <select id="encryption_flag" name="encryption_flag" class="form-control" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
-        <label for="login_type">Login Type:</label><br>
-        <input type="radio" id="oracle" name="login_type" value="Oracle" required>Oracle<br>
-        <input type="radio" id="sybase" name="login_type" value="Sybase" required>Sybase<br>
-        <input type="radio" id="mssql" name="login_type" value="MSSQL" required>MSSQL<br>
-        <!-- Add more radio buttons here -->
-        <br><br>
+<!-- Debugging output -->
+<ul>
+    {% for app in applications %}
+        <li>{{ app }}</li>
+    {% endfor %}
+</ul>
 
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required><br><br>
-
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-
-        <label for="db_host">DB Host:</label><br>
-        <input type="text" id="db_host" name="db_host"><br><br>
-
-        <label for="db_service_name">DB Service Name:</label><br>
-        <input type="text" id="db_service_name" name="db_service_name"><br><br>
-
-        <label for="db_port">DB Port:</label><br>
-        <input type="text" id="db_port" name="db_port"><br><br>
-
-        <label for="created">Created:</label><br>
-        <input type="datetime-local" id="created" name="created" required><br><br>
-
-        <label for="encryption_flag">Encryption Flag:</label><br>
-        <input type="radio" id="yes" name="encryption_flag" value="Yes" required>Yes<br>
-        <input type="radio" id="no" name="encryption_flag" value="No" required>No<br><br>
-
-        <input type="submit" value="Submit">
-    </form>
 {% endblock %}

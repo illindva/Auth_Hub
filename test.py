@@ -1,4 +1,12 @@
+import os
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
+from encryption_util import encrypt_password, decrypt_password
 
-fernet_key = Fernet.generate_key().decode()  # Generate a key and decode it to string
-print(f"Insert this key in your .env file as FERNET_KEY={fernet_key}")
+# Load environment variables from .env file
+load_dotenv()
+applications_list = os.getenv('APPLICATIONS', '').split(',')
+
+print(f"applications_list: {applications_list}")
+for app in applications_list:
+    print(app)

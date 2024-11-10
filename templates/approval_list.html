@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Approval List{% endblock %}
+
+{% block content %}
+<h1>Pending Approval Users</h1>
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>User Type</th>
+            <th>User Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[3] }}</td>
+            <td>{{ user[4] }}</td>
+            <td>{{ user[5] }}</td>
+            <td>
+                <a href="{{ url_for('approve_user', id=user[0]) }}" class="btn btn-primary btn-sm">Approve/Deny</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

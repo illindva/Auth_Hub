@@ -1,0 +1,68 @@
+.radio-group label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.main-content {
+    max-width: 1500px; /* You can adjust the max-width as needed */
+}
+
+.required-field::after {
+    content: '*';
+    color: red;
+    margin-left: 5px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.custom-table th, .custom-table td {
+    border: 3px double #000; /* Double border */
+    padding: 10px;
+    text-align: left;
+    word-wrap: break-word; /* Allow word wrapping */
+}
+.custom-table th {
+    background-color: #f2f2f2;
+}
+.custom-table td {
+    max-width: 200px; /* Maximum width to ensure content wraps */
+}
+
+@media screen and (max-width: 767px) {
+    .custom-table, .custom-table thead, .custom-table tbody, .custom-table th, .custom-table td, .custom-table tr {
+        display: block;
+    }
+    .custom-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    .custom-table tr {
+        border: 1px solid #ccc;
+    }
+    .custom-table td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    .custom-table td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        content: attr(data-title); /* Attribute for responsive labels */
+        font-weight: bold;
+    }
+}
