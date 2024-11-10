@@ -17,10 +17,20 @@
 <h2>Browse Pages</h2>
 <ul class="list-group">
     <li class="list-group-item">
-        <a href="{{ url_for('form') }}">Add Application Credentials</a>
+        <a href="{{ url_for('add_application_credentials') }}">Add Application Credentials</a>
     </li>
     <li class="list-group-item">
         <a href="{{ url_for('show_records') }}">Credential Records</a>
     </li>
+    {% if session.get('user_role', '').lower() == 'admin' %}
+    <li class="list-group-item">
+        <a href="{{ url_for('approval_list') }}">Approval List</a>
+    </li>
+    {% endif %}
 </ul>
+
+<!-- Debug Information -->
+<!--p>URL for form: {{ url_for('add_application_credentials') }}</p-->
+<!--p>URL for show_records: {{ url_for('show_records') }}</p-->
+
 {% endblock %}

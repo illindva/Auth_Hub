@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Records</h1>
-<table class="table table-bordered">
+<table class="custom-table">
     <thead>
         <tr>
             <th>ID</th>
@@ -43,5 +43,5 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('form') }}" class="btn btn-primary">Add New Record</a>
+<a href="{{ url_for('add_application_credentials') }}" class="btn btn-primary">Add New Record</a>
 {% endblock %}

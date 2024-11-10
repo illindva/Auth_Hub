@@ -77,7 +77,16 @@ def insert_record(record):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     # Store the created field in UTC
-    created_utc = datetime.strptime(record['created'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+    try:
+        # Assuming 'created' might come in different formats
+        try:
+            created_utc = datetime.strptime(record['created'], "%Y-%m-%dT%H:%M").replace(tzinfo=timezone.utc)
+        except ValueError:
+            created_utc = datetime.strptime(record['created'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+    except ValueError as e:
+        print(f"Error parsing date: {e}")
+        # You can handle the error here, maybe setting a default date or re-raising the exception
+        raise
 
     cursor.execute('''INSERT INTO Authorizations (application, login_type, username, password, db_host, db_service_name, db_port, created, encryption_flag)
                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',

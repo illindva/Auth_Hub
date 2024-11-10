@@ -5,7 +5,7 @@ import smtplib  # For sending email notifications
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from db import init_db, insert_record, get_records, get_record_by_id, delete_record, insert_user, get_user_by_username, \
@@ -15,8 +15,18 @@ from functools import wraps
 
 # Load environment variables from .env file
 load_dotenv()
+
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 ADMIN_EMAIL_PWD = decrypt_password(os.getenv('ADMIN_EMAIL_PWD'))
+
+# Verify the loading of the environment variable
+applications_list = os.getenv('APPLICATIONS', '')
+if not applications_list:
+    print("Environment variable for applications not found!")
+else:
+    applications_list = applications_list.split(',')
+    print(f"Loaded applications: {applications_list}")
+
 app = Flask(__name__)
 app.secret_key = os.getenv('APP_SECRET_KEY', '0123456789')
 
@@ -44,7 +54,7 @@ def admin_required(f):
         user = get_user_by_username(session['username'])
         if user[5] != 'Admin':
             flash("You do not have permission to view this page.")
-            return redirect(url_for('form'))
+            return redirect(url_for('home'))
         return f(*args, **kwargs)
 
     return decorated_function
@@ -131,9 +141,10 @@ def login():
                 flash("Your account is pending approval by an admin.")
                 return redirect(url_for('login'))
             session['username'] = username
+            session['user_role'] = user[5]
             flash("Logged in successfully!")
             next_page = request.args.get('next')
-            return redirect(next_page or url_for('form'))
+            return redirect(next_page or url_for('home'))
         else:
             flash("Invalid username or password!")
             return redirect(url_for('login'))
@@ -146,9 +157,9 @@ def logout():
     flash("Logged out successfully!")
     return redirect(url_for('login'))
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/add_application_credentials', methods=['GET', 'POST'])
 @login_required
-def form():
+def add_application_credentials():
     user = get_user_by_username(session['username'])
     if user[6] == 'No':
         flash("Your account is pending approval by an admin.")
@@ -164,6 +175,16 @@ def form():
         db_port = request.form.get('db_port')
         created = request.form['created']
         encryption_flag = request.form['encryption_flag']
+
+        # Normalizing the date format
+        try:
+            try:
+                created_utc = datetime.strptime(created, "%Y-%m-%dT%H:%M").replace(tzinfo=timezone.utc)
+            except ValueError:
+                created_utc = datetime.strptime(created, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        except ValueError as e:
+            flash(f"Date format error: {e}")
+            return redirect(request.url)  # Redirect to form page with error
 
         if encryption_flag == 'Yes':
             encrypted_password = encrypt_password(password)
@@ -186,7 +207,7 @@ def form():
         flash("Record has been added successfully!")
         return redirect(url_for('show_records'))
 
-    return render_template('form.html')
+    return render_template('form.html', appplications=applications_list)
 
 
 @app.route('/records', methods=['GET'])
@@ -220,7 +241,8 @@ def decrypt(id):
         return redirect(url_for('show_records'))
 
     decrypted_password = decrypt_password(record['password']) if record['encryption_flag'] == 'Yes' else record['password']
-    flash(f"Decrypted Password: {decrypted_password}")
+    UserName = record['username']
+    flash(f"Decrypted Password for {UserName}: {decrypted_password}")
     return redirect(url_for('show_records'))
 
 @app.route('/delete/<int:id>', methods=['POST'])
@@ -256,6 +278,19 @@ def approve_user(id):
 
     return render_template('approve_user.html', user=user)
 
+@app.route('/approval_list', methods=['GET'])
+@admin_required
+def approval_list():
+    user_role = session.get('user_role')
+    if not user_role:
+        flash("You need to log in to access this page.")
+        return redirect(url_for('login'))
+    if user_role.lower() != 'admin':
+        flash("Access denied: Admins only")
+        return redirect(url_for('home'))
+
+    users = [user for user in get_users_by_role('End User') + get_users_by_role('Developer') if user[6] == 'No']
+    return render_template('approval_list.html', users=users)
 
 if __name__ == '__main__':
     app.run(debug=True)

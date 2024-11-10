@@ -5,14 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Application{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
-        .navbar-brand img {
-            height: 40px;
-        }
-        .main-content {
-            max-width: 1500px; /* You can adjust the max-width as needed */
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,7 +15,7 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('form') }}">Home</a>
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('show_records') }}">Records</a>
@@ -47,13 +40,60 @@
         </div>
     </nav>
 
+    <!-- Flash messages modal -->
+    <div class="modal" tabindex="-1" id="flashModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+              <p>{{ message }}</p>
+              {% endfor %}
+            {% endif %}
+            {% endwith %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container main-content">
         {% block content %}{% endblock %}
     </div>
 
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            // Detect if there are flash messages
+            var hasMessages = {{ 'true' if get_flashed_messages() else 'false' }};
+            if (hasMessages) {
+                // Show the modal if there are flash messages
+                $('#flashModal').modal('show');
+
+                // Hide the modal after 30 seconds
+                setTimeout(function() {
+                    $('#flashModal').modal('hide');
+                }, 30000);
+            }
+        });
+    </script>
+
     <footer class="bg-light text-center text-lg-start mt-5">
         <div class="text-center p-3">
-            © 2023 MyApp. All rights reserved.
+            © 2024 AuthHub by AskiTech Solutions Ltd. All rights reserved.
         </div>
     </footer>
 </body>
